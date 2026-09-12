@@ -1,0 +1,45 @@
+{
+  "name": "aivora-backend",
+  "version": "2.0.0",
+  "description": "Aivora Backend API with AI-powered goal planning (plain JavaScript, LangChain + LangGraph)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint src/**/*.js"
+  },
+  "keywords": [
+    "ai",
+    "goal-tracking",
+    "productivity",
+    "langchain",
+    "langgraph"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "latest",
+    "@langchain/core": "^1.2.10",
+    "@langchain/google-genai": "latest",
+    "@langchain/langgraph": "^1.4.14",
+    "bcryptjs": "^2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2",
+    "dotenv": "^16",
+    "express": "^4",
+    "express-rate-limit": "^7",
+    "express-validator": "^7",
+    "helmet": "^7",
+    "jsonwebtoken": "^9",
+    "langchain": "latest",
+    "mongoose": "^8",
+    "morgan": "^1.10.1",
+    "pdfkit": "^0.17.2",
+    "sentiment": "^5"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "nodemon": "^3"
+  }
+}
