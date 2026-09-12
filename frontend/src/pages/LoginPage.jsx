@@ -42,19 +42,37 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
 
+    console.log("========== LOGIN START ==========");
+    console.log("Email:", email);
+
     try {
       const response = await authAPI.login({
         email,
         password,
       });
 
+      console.log("1. LOGIN API RESPONSE:", response);
+      console.log("2. TOKEN RECEIVED:", !!response?.token);
+      console.log("3. USER RECEIVED:", response?.user);
+
       const { token, user } = response;
 
+      console.log("4. BEFORE SET TOKEN");
       setToken(token);
+
+      console.log("5. AFTER SET TOKEN");
+
       setUser(user);
+
+      console.log("6. AUTH STORE:", useAuthStore.getState());
+
+      console.log("7. NAVIGATING TO DASHBOARD");
 
       navigate("/dashboard");
     } catch (err) {
+      console.error("LOGIN ERROR:", err);
+      console.error("LOGIN ERROR RESPONSE:", err.response?.data);
+
       setError(
         err.response?.data?.error ||
           err.response?.data?.message ||
@@ -62,6 +80,7 @@ export default function LoginPage() {
       );
     } finally {
       setIsLoading(false);
+      console.log("========== LOGIN END ==========");
     }
   };
 

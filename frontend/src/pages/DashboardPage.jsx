@@ -45,23 +45,44 @@ const item = {
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuthStore();
+
+  console.log("========== DASHBOARD ==========");
+  console.log("User:", user);
+  console.log("isAuthenticated:", isAuthenticated);
+  console.log("Token:", !!useAuthStore.getState().token);
+  console.log("LocalStorage Token:", !!localStorage.getItem("auth_token"));
   const [goals, setGoals] = useState([]);
   const [progressData, setProgressData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   useEffect(() => {
+    console.log("DASHBOARD useEffect");
+    console.log("isAuthenticated:", isAuthenticated);
+
     if (!isAuthenticated) {
+      console.log("AUTH FAILED → REDIRECTING TO LOGIN");
       navigate("/login");
       return;
     }
+
+    console.log("AUTH SUCCESS → FETCHING GOALS");
     fetchGoals();
   }, [isAuthenticated, navigate]);
   const fetchGoals = async () => {
     try {
+      console.log("========== FETCH GOALS ==========");
+
       setIsLoading(true);
       setError("");
+
       const response = await goalAPI.getAll();
+
+      console.log("GOALS API RESPONSE:", response);
+
       const fetchedGoals = response.goals || [];
+
+      console.log("GOALS COUNT:", fetchedGoals.length);
+
       setGoals(fetchedGoals);
 
       // Fetch progress for each goal

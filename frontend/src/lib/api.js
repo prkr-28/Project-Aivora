@@ -14,9 +14,19 @@ class ApiClient {
     this.axiosInstance.interceptors.request.use(
       (config) => {
         const token = this.getToken();
+
+        console.log("========== API REQUEST ==========");
+        console.log("URL:", config.baseURL + config.url);
+        console.log("METHOD:", config.method);
+        console.log("TOKEN EXISTS:", !!token);
+
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
+          console.log("AUTH HEADER ADDED");
+        } else {
+          console.log("NO TOKEN FOUND");
         }
+
         return config;
       },
       (error) => Promise.reject(error),
@@ -24,14 +34,27 @@ class ApiClient {
 
     // Response interceptor to handle errors
     this.axiosInstance.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log("========== API RESPONSE ==========");
+        console.log("URL:", response.config.url);
+        console.log("STATUS:", response.status);
+
+        return response;
+      },
       (error) => {
+        console.error("========== API ERROR ==========");
+        console.error("URL:", error.config?.url);
+        console.error("STATUS:", error.response?.status);
+        console.error("DATA:", error.response?.data);
+
         if (error.response?.status === 401) {
           this.clearToken();
+
           if (typeof window !== "undefined") {
             window.location.href = "/login";
           }
         }
+
         return Promise.reject(error);
       },
     );

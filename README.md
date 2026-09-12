@@ -691,33 +691,60 @@ Aivora implements multiple layers of security:
 
 ## 🚢 Deployment
 
-### Frontend (Vercel)
+### ☁️ AWS EC2 Full Production Deployment (Recommended)
 
+For a complete step-by-step walkthrough covering AWS EC2 setup, Ubuntu 22.04 LTS, Node.js 20, PM2 process management, Nginx reverse proxy, and Let's Encrypt SSL, check the dedicated guide:
+
+👉 **[📖 Complete AWS EC2 Deployment Guide (DEPLOYMENT.md)](./DEPLOYMENT.md)**
+
+#### Quick Summary of AWS EC2 Commands:
+```bash
+# 1. Update system & install Node 20 LTS + Nginx + PM2
+sudo apt update && sudo apt upgrade -y
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs nginx git
+sudo npm install -g pm2
+
+# 2. Setup & run backend with PM2
+cd /home/ubuntu/project-Aivora/backend
+npm install
+pm2 start src/server.js --name "aivora-backend"
+pm2 save && pm2 startup
+
+# 3. Build frontend (Vite)
+cd /home/ubuntu/project-Aivora/frontend
+npm install
+npm run build   # Generates /dist
+
+# 4. Configure Nginx (/etc/nginx/sites-available/default) & restart
+sudo systemctl restart nginx
+```
+
+---
+
+### 🌐 Alternative Deployment (Vercel + Managed Backend)
+
+#### Frontend (Vercel)
 ```bash
 cd frontend
 npm run build        # Produces dist/ folder
-# Deploy dist/ to Vercel, Netlify, or any static host
+# Deploy dist/ to Vercel, Netlify, or Cloudflare Pages
 ```
+Set `VITE_API_URL` to your live backend URL.
 
-Set the environment variable `VITE_API_URL` to your deployed backend URL.
-
-### Backend (Railway / Render / VPS)
-
+#### Backend (Railway / Render / VPS)
 ```bash
 cd backend
 npm start            # Runs node src/server.js
 ```
 
-Ensure all environment variables are configured in your hosting provider's dashboard.
-
 ### Production Checklist
-
 - [ ] Set `NODE_ENV=production`
 - [ ] Use a strong, unique `JWT_SECRET`
 - [ ] Configure `FRONTEND_URL` with your production domain(s)
 - [ ] Set appropriate `RATE_LIMIT_*` values for production traffic
-- [ ] Enable MongoDB Atlas IP whitelisting
-- [ ] Use HTTPS for all endpoints
+- [ ] Enable MongoDB Atlas IP whitelisting for EC2 Elastic IP
+- [ ] Use HTTPS / SSL for all endpoints via Certbot (`sudo certbot --nginx`)
 
 ---
 
