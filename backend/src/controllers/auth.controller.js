@@ -16,9 +16,11 @@ export const register = asyncHandler(async (req, res) => {
   }
   const { name, email, password } = req.body;
 
-  // Check if user exists
+  // Check if user exists (normalize case/whitespace — the schema's
+  // `lowercase`/`trim` setters only run on save, not on query filters)
+  const normalizedEmail = email.trim().toLowerCase();
   const existingUser = await User.findOne({
-    email,
+    email: normalizedEmail,
   });
   if (existingUser) {
     res.status(400).json({
@@ -60,9 +62,14 @@ export const login = asyncHandler(async (req, res) => {
   }
   const { email, password } = req.body;
 
+  // Normalize the same way the schema does on save — otherwise a user
+  // whose email was stored lowercase (always, via the schema setter) will
+  // fail this exact-match query if they type/autofill a different case.
+  const normalizedEmail = email.trim().toLowerCase();
+
   // Find user and include password
   const user = await User.findOne({
-    email,
+    email: normalizedEmail,
   }).select("+password");
   if (!user || !user.password) {
     res.status(401).json({

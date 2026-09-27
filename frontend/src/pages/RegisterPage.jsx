@@ -1,18 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ArrowLeft,
-  Brain,
-  User,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  Check,
-  X,
-} from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,10 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Link, useNavigate } from "react-router-dom";
+import { Brain, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { authAPI } from "@/lib/api";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -38,9 +26,6 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
   });
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -54,9 +39,9 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
 
+    // Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -93,21 +78,18 @@ export default function RegisterPage() {
     }
   };
 
-  const passwordsMatch =
-    formData.confirmPassword && formData.password === formData.confirmPassword;
-
-  const passwordsDoNotMatch =
-    formData.confirmPassword && formData.password !== formData.confirmPassword;
-
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-10">
-      {/* ================= BACKGROUND ================= */}
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4 py-8">
+      {/* =========================================================
+          BACKGROUND
+      ========================================================= */}
 
+      {/* Base gradient - SAME AS HOMEPAGE */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 dark:from-cyan-500/10 dark:via-blue-500/10 dark:to-purple-500/10" />
 
-      {/* Grid */}
+      {/* SaaS Grid - SAME AS HOMEPAGE */}
       <div
-        className="absolute inset-0 opacity-[0.025]"
+        className="absolute inset-0 opacity-[0.035] dark:opacity-[0.04]"
         style={{
           backgroundImage:
             "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
@@ -115,39 +97,56 @@ export default function RegisterPage() {
         }}
       />
 
-      {/* Orbs */}
-      <motion.div
-        className="absolute top-10 left-10 w-72 h-72 bg-indigo-500/25 dark:bg-cyan-500/15 rounded-full blur-3xl"
-        animate={{
-          x: [0, 80, 0],
-          y: [0, 40, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {/* Soft grid glow - SAME AS HOMEPAGE */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,hsl(var(--background)/0.35)_100%)] pointer-events-none" />
 
-      <motion.div
-        className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/25 dark:bg-blue-500/15 rounded-full blur-3xl"
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -40, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {/* Floating orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Left orb */}
+        <motion.div
+          className="absolute top-20 left-10 md:left-20 w-72 h-72 bg-indigo-500/30 dark:bg-cyan-500/20 rounded-full blur-3xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
-      {/* ================= REGISTER ================= */}
+        {/* Right orb */}
+        <motion.div
+          className="absolute bottom-10 right-10 md:right-20 w-80 md:w-96 h-80 md:h-96 bg-purple-500/30 dark:bg-blue-500/20 rounded-full blur-3xl"
+          animate={{
+            x: [0, -100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
+
+      {/* =========================================================
+          THEME TOGGLE
+      ========================================================= */}
+
+      <div className="absolute top-5 right-5 z-30">
+        <ThemeToggle />
+      </div>
+
+      {/* =========================================================
+          REGISTER CARD
+      ========================================================= */}
 
       <motion.div
         initial={{
           opacity: 0,
-          y: 24,
+          y: 25,
         }}
         animate={{
           opacity: 1,
@@ -155,71 +154,45 @@ export default function RegisterPage() {
         }}
         transition={{
           duration: 0.5,
-          ease: "easeOut",
         }}
         className="relative z-10 w-full max-w-[430px]"
       >
-        <Card
-          className="
-            border-border/50
-            bg-card/80
-            backdrop-blur-xl
-            shadow-2xl
-            rounded-3xl
-            overflow-hidden
-          "
-        >
-          {/* Gradient line */}
-          <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500" />
-
-          <CardHeader className="px-7 pt-8 pb-5 text-center">
+        <Card className="glass-card border-border/60 shadow-2xl backdrop-blur-xl">
+          <CardHeader className="text-center px-6 pt-8 pb-5">
             {/* Logo */}
             <motion.div
               initial={{
-                scale: 0.8,
                 opacity: 0,
+                scale: 0.8,
               }}
               animate={{
-                scale: 1,
                 opacity: 1,
+                scale: 1,
               }}
               transition={{
-                delay: 0.1,
+                duration: 0.4,
               }}
               className="flex justify-center mb-5"
             >
-              <div
-                className="
-                  relative
-                  w-14
-                  h-14
-                  rounded-2xl
-                  flex
-                  items-center
-                  justify-center
-                  bg-primary/10
-                  border
-                  border-primary/20
-                  shadow-lg
-                  shadow-primary/10
-                "
-              >
-                <div className="absolute inset-0 rounded-2xl bg-primary/10 blur-xl" />
+              <div className="relative">
+                <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl" />
 
-                <Brain className="relative w-7 h-7 text-primary" />
+                <div className="relative w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Brain className="w-8 h-8 text-primary" />
+                </div>
               </div>
             </motion.div>
 
             <CardTitle className="text-3xl font-bold tracking-tight">
-              Create your account
+              Create Account
             </CardTitle>
 
-            <CardDescription className="mt-2 text-sm">
+            <CardDescription className="text-sm md:text-base mt-2">
               Start your journey with Aivora today
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="px-7 pb-8">
+          <CardContent className="px-6 pb-7">
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Error */}
               {error && (
@@ -232,42 +205,20 @@ export default function RegisterPage() {
                     opacity: 1,
                     y: 0,
                   }}
-                  className="
-                    rounded-xl
-                    border
-                    border-destructive/20
-                    bg-destructive/10
-                    px-4
-                    py-3
-                    text-sm
-                    text-destructive
-                  "
+                  className="rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive"
                 >
                   {error}
                 </motion.div>
               )}
 
-              {/* ================= NAME ================= */}
-
+              {/* Name */}
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium">
-                  Full name
+                  Full Name
                 </Label>
 
                 <div className="relative group">
-                  <User
-                    className="
-                      absolute
-                      left-4
-                      top-1/2
-                      -translate-y-1/2
-                      w-4
-                      h-4
-                      text-muted-foreground
-                      transition-colors
-                      group-focus-within:text-primary
-                    "
-                  />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground transition-colors group-focus-within:text-primary" />
 
                   <Input
                     id="name"
@@ -278,300 +229,181 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    autoComplete="name"
-                    className="
-                      h-12
-                      rounded-xl
-                      pl-11
-                      pr-4
-                      bg-background/60
-                      border-border/70
-                      shadow-sm
-                      transition-all
-                      duration-200
-                      placeholder:text-muted-foreground/50
-                      hover:border-primary/30
-                      focus-visible:border-primary/60
-                      focus-visible:ring-4
-                      focus-visible:ring-primary/10
-                    "
+                    className="h-12 rounded-xl border-border/70 bg-background/60 pl-11 pr-4 shadow-sm transition-all placeholder:text-muted-foreground/60 hover:border-primary/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                   />
                 </div>
               </div>
 
-              {/* ================= EMAIL ================= */}
-
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Email address
+                  Email
                 </Label>
 
                 <div className="relative group">
-                  <Mail
-                    className="
-                      absolute
-                      left-4
-                      top-1/2
-                      -translate-y-1/2
-                      w-4
-                      h-4
-                      text-muted-foreground
-                      transition-colors
-                      group-focus-within:text-primary
-                    "
-                  />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground transition-colors group-focus-within:text-primary" />
 
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder="name@example.com"
                     value={formData.email}
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    autoComplete="email"
-                    className="
-                      h-12
-                      rounded-xl
-                      pl-11
-                      pr-4
-                      bg-background/60
-                      border-border/70
-                      shadow-sm
-                      transition-all
-                      duration-200
-                      placeholder:text-muted-foreground/50
-                      hover:border-primary/30
-                      focus-visible:border-primary/60
-                      focus-visible:ring-4
-                      focus-visible:ring-primary/10
-                    "
+                    className="h-12 rounded-xl border-border/70 bg-background/60 pl-11 pr-4 shadow-sm transition-all placeholder:text-muted-foreground/60 hover:border-primary/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                   />
                 </div>
               </div>
 
-              {/* ================= PASSWORD ================= */}
-
+              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
 
                 <div className="relative group">
-                  <Lock
-                    className="
-                      absolute
-                      left-4
-                      top-1/2
-                      -translate-y-1/2
-                      w-4
-                      h-4
-                      text-muted-foreground
-                      transition-colors
-                      group-focus-within:text-primary
-                    "
-                  />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground transition-colors group-focus-within:text-primary" />
 
                   <Input
                     id="password"
                     name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
+                    type="password"
+                    placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    autoComplete="new-password"
-                    className="
-                      h-12
-                      rounded-xl
-                      pl-11
-                      pr-11
-                      bg-background/60
-                      border-border/70
-                      shadow-sm
-                      transition-all
-                      duration-200
-                      placeholder:text-muted-foreground/50
-                      hover:border-primary/30
-                      focus-visible:border-primary/60
-                      focus-visible:ring-4
-                      focus-visible:ring-primary/10
-                    "
+                    className="h-12 rounded-xl border-border/70 bg-background/60 pl-11 pr-4 shadow-sm transition-all placeholder:text-muted-foreground/60 hover:border-primary/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                   />
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="
-                      absolute
-                      right-3
-                      top-1/2
-                      -translate-y-1/2
-                      p-1.5
-                      rounded-lg
-                      text-muted-foreground
-                      hover:text-foreground
-                      hover:bg-muted
-                      transition-colors
-                    "
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
                 </div>
 
-                <p className="text-xs text-muted-foreground px-1">
-                  Use at least 6 characters
+                <p className="text-xs text-muted-foreground pl-1">
+                  At least 6 characters
                 </p>
               </div>
 
-              {/* ================= CONFIRM PASSWORD ================= */}
-
+              {/* Confirm Password */}
               <div className="space-y-2">
                 <Label
                   htmlFor="confirmPassword"
                   className="text-sm font-medium"
                 >
-                  Confirm password
+                  Confirm Password
                 </Label>
 
                 <div className="relative group">
-                  <Lock
-                    className="
-                      absolute
-                      left-4
-                      top-1/2
-                      -translate-y-1/2
-                      w-4
-                      h-4
-                      text-muted-foreground
-                      transition-colors
-                      group-focus-within:text-primary
-                    "
-                  />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground transition-colors group-focus-within:text-primary" />
 
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
+                    type="password"
+                    placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    autoComplete="new-password"
-                    className={`
-                      h-12
-                      rounded-xl
-                      pl-11
-                      pr-11
-                      bg-background/60
-                      shadow-sm
-                      transition-all
-                      duration-200
-                      placeholder:text-muted-foreground/50
-                      focus-visible:ring-4
-                      ${
-                        passwordsMatch
-                          ? "border-green-500/70 focus-visible:border-green-500 focus-visible:ring-green-500/10"
-                          : passwordsDoNotMatch
-                            ? "border-red-500/70 focus-visible:border-red-500 focus-visible:ring-red-500/10"
-                            : "border-border/70 hover:border-primary/30 focus-visible:border-primary/60 focus-visible:ring-primary/10"
-                      }
-                    `}
+                    className={`h-12 rounded-xl border-border/70 bg-background/60 pl-11 pr-11 shadow-sm transition-all placeholder:text-muted-foreground/60 hover:border-primary/30 focus-visible:ring-2 ${
+                      formData.confirmPassword &&
+                      formData.password === formData.confirmPassword
+                        ? "border-green-500 focus-visible:border-green-500 focus-visible:ring-green-500/20"
+                        : formData.confirmPassword &&
+                            formData.password !== formData.confirmPassword
+                          ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/20"
+                          : "focus-visible:border-primary focus-visible:ring-primary/20"
+                    }`}
                   />
 
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    className="
-                      absolute
-                      right-3
-                      top-1/2
-                      -translate-y-1/2
-                      p-1.5
-                      rounded-lg
-                      text-muted-foreground
-                      hover:text-foreground
-                      hover:bg-muted
-                      transition-colors
-                    "
-                    aria-label={
-                      showConfirmPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-
-                  {/* Match icon */}
+                  {/* Password status icon */}
                   {formData.confirmPassword && (
-                    <div
-                      className="
-                        absolute
-                        right-11
-                        top-1/2
-                        -translate-y-1/2
-                      "
-                    >
-                      {passwordsMatch ? (
-                        <Check className="w-4 h-4 text-green-500" />
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                      {formData.password === formData.confirmPassword ? (
+                        <motion.div
+                          initial={{
+                            scale: 0,
+                          }}
+                          animate={{
+                            scale: 1,
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                          }}
+                        >
+                          <svg
+                            className="w-5 h-5 text-green-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
                       ) : (
-                        <X className="w-4 h-4 text-red-500" />
+                        <motion.div
+                          initial={{
+                            scale: 0,
+                          }}
+                          animate={{
+                            scale: 1,
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                          }}
+                        >
+                          <svg
+                            className="w-5 h-5 text-red-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
                       )}
                     </div>
                   )}
                 </div>
 
-                {passwordsDoNotMatch && (
-                  <p className="text-xs text-red-500 px-1">
-                    Passwords do not match
-                  </p>
-                )}
+                {/* Password status */}
+                {formData.confirmPassword &&
+                  formData.password !== formData.confirmPassword && (
+                    <p className="text-xs text-red-500 pl-1">
+                      Passwords do not match
+                    </p>
+                  )}
 
-                {passwordsMatch && (
-                  <p className="text-xs text-green-500 px-1">Passwords match</p>
-                )}
+                {formData.confirmPassword &&
+                  formData.password === formData.confirmPassword && (
+                    <p className="text-xs text-green-500 pl-1">
+                      Passwords match
+                    </p>
+                  )}
               </div>
 
-              {/* ================= SUBMIT ================= */}
-
-              <div className="flex justify-center mt-2">
+              {/* Create Account Button */}
+              <div className="flex justify-center pt-2">
                 <Button
                   type="submit"
                   variant="gradient"
                   size="lg"
                   disabled={isLoading}
-                  className="
-      w-full
-      sm:w-[370px]
-      h-12
-      rounded-xl
-      font-semibold
-      shadow-lg
-      shadow-primary/20
-      transition-all
-      duration-200
-      hover:shadow-xl
-      hover:shadow-primary/25
-      hover:-translate-y-[1px]
-      active:translate-y-0
-    "
+                  className="w-full h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20"
                 >
                   {isLoading ? (
                     <motion.div
-                      animate={{ rotate: 360 }}
+                      animate={{
+                        rotate: 360,
+                      }}
                       transition={{
                         duration: 1,
                         repeat: Infinity,
@@ -581,7 +413,7 @@ export default function RegisterPage() {
                     />
                   ) : (
                     <>
-                      Create account
+                      Create Account
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </>
                   )}
@@ -589,28 +421,23 @@ export default function RegisterPage() {
               </div>
             </form>
 
-            {/* ================= LOGIN ================= */}
-
-            <div className="mt-7 text-center">
-              <p className="text-sm text-muted-foreground">
+            {/* Login */}
+            <div className="mt-6 text-center text-sm">
+              <span className="text-muted-foreground">
                 Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="
-                    font-semibold
-                    text-primary
-                    hover:text-primary/80
-                    transition-colors
-                  "
-                >
-                  Sign in
-                </Link>
-              </p>
+              </span>
+
+              <Link
+                to="/login"
+                className="text-primary font-semibold hover:underline underline-offset-4"
+              >
+                Sign in
+              </Link>
             </div>
           </CardContent>
         </Card>
 
-        {/* Back home */}
+        {/* Back to home */}
         <motion.div
           initial={{
             opacity: 0,
@@ -621,21 +448,13 @@ export default function RegisterPage() {
           transition={{
             delay: 0.3,
           }}
-          className="mt-6 text-center"
+          className="text-center mt-6"
         >
           <Link
             to="/"
-            className="
-              inline-flex
-              items-center
-              gap-2
-              text-sm
-              text-muted-foreground
-              hover:text-foreground
-              transition-colors
-            "
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="mr-2 w-4 h-4" />
             Back to home
           </Link>
         </motion.div>
