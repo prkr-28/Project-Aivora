@@ -95,6 +95,21 @@ class ApiClient {
     }
     return response.data;
   }
+  async googleLogin(credential) {
+    const response = await this.axiosInstance.post("/auth/google", {
+      credential,
+    });
+    if (response.data.token) {
+      this.setToken(response.data.token);
+      if (typeof window !== "undefined") {
+        const { setToken } = await import("@/store/authStore").then((m) =>
+          m.useAuthStore.getState(),
+        );
+        setToken(response.data.token);
+      }
+    }
+    return response.data;
+  }
   async getMe() {
     const response = await this.axiosInstance.get("/auth/me");
     return response.data;
@@ -204,6 +219,7 @@ export const api = new ApiClient();
 export const authAPI = {
   register: (data) => api.register(data),
   login: (data) => api.login(data),
+  googleLogin: (credential) => api.googleLogin(credential),
   getMe: () => api.getMe(),
 };
 export const goalAPI = {

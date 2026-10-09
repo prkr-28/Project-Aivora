@@ -46,7 +46,9 @@ if (config.nodeEnv === "development") {
 } else {
   app.use(morgan("combined")); // Apache-style logs for production
 }
-app.use(express.json());
+app.use(express.json()); //Express middleware that parses incoming JSON request bodies and makes the data available in req.body
+
+//app.use(express.urlencoded({ extended: true })); is Express middleware that parses incoming form data encoded as URL-encoded data and makes it available in req.body
 app.use(
   express.urlencoded({
     extended: true,
@@ -86,30 +88,18 @@ app.use(errorHandler);
 const startServer = async () => {
   try {
     await connectDatabase();
-    console.log("Database connected, starting server...");
-    const PORT =
-      typeof config.port === "string" ? parseInt(config.port) : config.port;
+
     const server = http.createServer(app);
     server.listen(config.port, () => {
-      console.log(`
-╔══════════════════════════════════════════════╗
-║   🚀 Aivora API Server                       ║
-║                                              ║
-║   Environment: ${config.nodeEnv.padEnd(28)}  ║
-║   Port: ${String(config.port).padEnd(34)}   ║
-║   Database: Connected                        ║
-║   URL: http://localhost:${PORT}                 ║
-║                                              ║
-╚══════════════════════════════════════════════╝
-      `);
-      console.log("✓ Server is now listening for requests");
+      console.log(`Server running on port ${config.port}, MongoDB: Connected`);
     });
+
     server.on("error", (err) => {
-      console.error("Server error:", err);
+      console.error("Server error:", err.message);
       process.exit(1);
     });
   } catch (error) {
-    console.error("✗ Failed to start server:", error);
+    console.error("Failed to start server:", error.message);
     process.exit(1);
   }
 };

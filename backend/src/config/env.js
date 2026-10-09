@@ -14,6 +14,7 @@ export const config = {
   mongodbUri: process.env.MONGODB_URI,
   jwtSecret: process.env.JWT_SECRET || "your-secret-key",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
   openaiApiKey: process.env.OPENAI_API_KEY || "",
   groqApiKey: process.env.GROQ_API_KEY || "",
   geminiApiKey: process.env.GEMINI_API_KEY || "",

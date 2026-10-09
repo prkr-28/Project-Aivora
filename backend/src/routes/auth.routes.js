@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { register, login, getMe } from "../controllers/auth.controller.js";
+import {
+  register,
+  login,
+  googleLogin,
+  getMe,
+} from "../controllers/auth.controller.js";
 import { authenticate } from "../middleware/auth.js";
 import { authLimiter } from "../middleware/rateLimiter.js";
 const router = Router();
@@ -23,5 +28,6 @@ const loginValidation = [
 // Routes
 router.post("/register", authLimiter, registerValidation, register);
 router.post("/login", authLimiter, loginValidation, login);
+router.post("/google", authLimiter, googleLogin);
 router.get("/me", authenticate, getMe);
 export default router;

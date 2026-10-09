@@ -15,6 +15,7 @@ import { Brain, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { authAPI } from "@/lib/api";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -29,6 +30,24 @@ export default function RegisterPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleGoogleCredential = async (credential) => {
+    setError("");
+    setIsLoading(true);
+    try {
+      const response = await authAPI.googleLogin(credential);
+      setToken(response.token);
+      setUser(response.user);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+          "Failed to sign in with Google. Please try again.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -420,6 +439,18 @@ export default function RegisterPage() {
                 </Button>
               </div>
             </form>
+
+            <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="h-px flex-1 bg-border" />
+              <span>OR</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+
+            <GoogleSignInButton
+              onCredential={handleGoogleCredential}
+              onUnavailable={setError}
+              disabled={isLoading}
+            />
 
             {/* Login */}
             <div className="mt-6 text-center text-sm">

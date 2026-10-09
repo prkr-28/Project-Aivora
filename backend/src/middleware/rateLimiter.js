@@ -14,10 +14,10 @@ export const apiLimiter = rateLimit({
 
 // Stricter rate limiter for authentication routes
 export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  // 15 minutes
-  max: 20,
-  // Limit each IP to 20 requests per windowMs
+  windowMs: 60 * 1000,
+  // 1 minute
+  max: 10,
+  // Limit each IP to 10 authentication requests per windowMs
   message: "Too many authentication attempts, please try again later.",
   skipSuccessfulRequests: true,
 });

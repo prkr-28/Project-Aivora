@@ -419,6 +419,7 @@ npm install
 Configure the API URL in `.env`:
 ```env
 VITE_API_URL=http://localhost:5000
+VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id
 ```
 
 Start the dev server:
@@ -443,6 +444,7 @@ Navigate to **http://localhost:3000** and start planning your goals! 🎯
 | `MONGODB_URI` | MongoDB connection string | — | **Yes** |
 | `JWT_SECRET` | Secret key for JWT tokens | `your-secret-key` | **Yes** |
 | `JWT_EXPIRES_IN` | JWT token expiry duration | `7d` | No |
+| `GOOGLE_CLIENT_ID` | Google OAuth web client ID used to verify ID tokens | — | Required for Google auth |
 | `GEMINI_API_KEY` | Google Gemini API key | — | **Yes** |
 | `FRONTEND_URL` | Comma-separated allowed origins | `http://localhost:3000` | No |
 | `RATE_LIMIT_WINDOW_MS` | Rate limit window (ms) | `900000` | No |
@@ -453,6 +455,7 @@ Navigate to **http://localhost:3000** and start planning your goals! 🎯
 | Variable | Description | Default |
 |---|---|---|
 | `VITE_API_URL` | Backend API base URL | `http://localhost:5000` |
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth web client ID for the Google sign-in button | — |
 
 ---
 
@@ -466,6 +469,7 @@ All API routes are prefixed with `/api`. Protected routes require a `Bearer` tok
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Register a new user | ❌ |
 | `POST` | `/api/auth/login` | Login and receive JWT | ❌ |
+| `POST` | `/api/auth/google` | Verify Google credential, upsert user, and receive JWT | ❌ |
 | `GET` | `/api/auth/me` | Get current user profile | ✅ |
 
 ### 🎯 Goals

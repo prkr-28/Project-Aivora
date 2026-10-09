@@ -27,6 +27,7 @@ const userSchema = new Schema(
     },
     providerId: {
       type: String,
+      unique: true,
       sparse: true,
     },
     avatar: {

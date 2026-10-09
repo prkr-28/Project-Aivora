@@ -30,6 +30,7 @@
     "express": "^4",
     "express-rate-limit": "^7",
     "express-validator": "^7",
+    "google-auth-library": "^10",
     "helmet": "^7",
     "jsonwebtoken": "^9",
     "langchain": "latest",

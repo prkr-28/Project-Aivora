@@ -2,3 +2,9 @@ node_modules
 dist
 .env.local
 *.log
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+.env
+.env.*
+!.env.example
