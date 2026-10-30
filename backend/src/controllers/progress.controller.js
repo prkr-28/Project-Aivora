@@ -2,7 +2,7 @@ import { validationResult } from "express-validator";
 import { Progress } from "../models/Progress.js";
 import { Goal } from "../models/Goal.js";
 import { asyncHandler } from "../middleware/errorHandler.js";
-import { analyzeSentiment } from "../ai/utils/sentimentAnalyzer.js";
+import { analyzeSentimentLLM } from "../ai/utils/llmSentiment.js";
 
 // @desc    Create or update progress entry
 // @route   POST /api/progress
@@ -32,7 +32,7 @@ export const createProgress = asyncHandler(async (req, res) => {
   // Analyze sentiment if comment provided
   let sentimentScore = 0;
   if (comment) {
-    const sentiment = analyzeSentiment(comment);
+    const sentiment = await analyzeSentimentLLM(comment);
     sentimentScore = sentiment.score;
   }
 
